@@ -77,7 +77,13 @@ stages:
           - task: TerraformTaskV4@4
             inputs:
               provider: 'azurerm'
-              command: 'validate'
+              command: 'validate'          
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              commandOptions: '--auto-approve'
+              environmentServiceNameAzureRM: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
           - task: MysqlDeploymentOnMachineGroup@1
             inputs:
               TaskNameSelector: 'SqlTaskFile'
