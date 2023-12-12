@@ -78,6 +78,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'apply'
+              workingDirectory: '$(Pipeline.Workspace)/drop'
               commandOptions: '--auto-approve'
               environmentServiceNameAzureRM: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
           - task: MysqlDeploymentOnMachineGroup@1
