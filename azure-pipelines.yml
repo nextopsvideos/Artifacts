@@ -71,6 +71,9 @@ stages:
       runOnce:
         deploy:
           steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
           - task: MysqlDeploymentOnMachineGroup@1
             inputs:
               TaskNameSelector: 'SqlTaskFile'
