@@ -57,6 +57,14 @@ resource "azurerm_mysql_server" "example" {
   administrator_login_password = "Admin@12345678"
 }
 
+resource "azurerm_mysql_firewall_rule" "example" {
+  name                = "office"
+  resource_group_name = azurerm_resource_group.example.name
+  server_name         = azurerm_mysql_server.example.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
+}
+
 resource "azurerm_mysql_database" "example" {
   name                = "petclinic"
   resource_group_name = azurerm_resource_group.example.name
