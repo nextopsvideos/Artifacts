@@ -5,7 +5,15 @@ terraform {
       version = "=3.80.0"
     }
   }
+  backend "azurerm" {
+    resource_group_name   = "NextOps"
+    storage_account_name   = "nextopstfsa01"
+    container_name         = "terraform"
+    key                    = "DEV/dev.tfstate"
+    access_key             = "SuDLpDTyryllePyyazARUJqAYgyg320ernpjv/3wJglfCK8yrp36LV8L5L7tR8tCmTLC86x3BmuQ+AStJARcRg=="
+  }
 }
+
 
 provider "azurerm" {
   features {}
