@@ -291,7 +291,7 @@
 
     </dependencies>
 
-    <!-- Maven plugin versions are mentioned in order to guarantee the build reproducibility in the long term -->
+    <!-- Maven plugin versions are mentioned in order to guarantee the build reproducibility in the long term-->
     <build>
         <defaultGoal>install</defaultGoal>
         <finalName>petclinic</finalName>
