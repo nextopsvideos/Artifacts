@@ -74,16 +74,15 @@ stages:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: 'latest'        
-          - task: TerraformTaskV1@0
+          - task: TerraformTaskV2@2
             inputs:
               provider: 'azurerm'
               command: 'init'
-              workingDirectory: '$(Pipeline.Workspace)/drop'
               backendServiceArm: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
               backendAzureRmResourceGroupName: 'NextOps'
               backendAzureRmStorageAccountName: 'nextopstfsa01'
               backendAzureRmContainerName: 'terraform'
-              backendAzureRmKey: 'DEV/dev.tfstate'
+              backendAzureRmKey: 'DEV/dev.tfstate'            
           - task: TerraformTaskV1@0
             inputs:
               provider: 'azurerm'
