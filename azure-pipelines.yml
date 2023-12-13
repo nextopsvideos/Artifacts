@@ -7,10 +7,6 @@ trigger:
 - 5.3.x
 
 variables:
-
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '6b13f315-5cb5-4b7d-8928-ca4506226209'
-
   # Web app name
   webAppName: 'nextopswa11'
 
@@ -110,7 +106,8 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Azure Web App Deploy: nextopswa11'
             inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
+              azureSubscription: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
+              appType: 'webAppLinux'
+              appName: '$(webAppName)'
               package: '$(Pipeline.Workspace)/drop/**/target/*.?(war|jar)'
+              runtimeStack: 'TOMCAT|8.5-jre8'
