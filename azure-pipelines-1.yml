@@ -9,6 +9,7 @@ trigger:
 variables:
   # Web app name
   webAppName: 'nextopswa11'
+  DBName : 'nextopsmysql11'
 
   # Environment name
   environmentName: 'nextopswa11'
@@ -60,14 +61,12 @@ stages:
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
-        mavenPomFile: 'pom.xml'
-        
+        mavenPomFile: 'pom.xml'        
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(build.sourcesdirectory)/src/main/resources/db/mysql'
         Contents: '*.sql'
         TargetFolder: '$(build.artifactstagingdirectory)'
-
     - task: CopyFiles@2
       displayName: 'Copy Files to artifact staging directory'
       inputs:
