@@ -16,7 +16,7 @@ stages:
   - job: MavenPackageAndPublishArtifacts
     displayName: Maven Package and Publish Artifacts
     pool:
-      vmImage: $(vmImageName)
+      vmImage: '$(vmImageName)'
 
     steps:
     - task: TerraformTaskV2@2
