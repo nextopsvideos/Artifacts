@@ -7,7 +7,7 @@ trigger:
 - None
 
 variables:
-- group: DBPasses
+- group: 'DBPasses'
 
 stages:
 - stage: Build
