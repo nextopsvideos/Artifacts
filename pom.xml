@@ -294,7 +294,7 @@
     <!-- Maven plugin versions are mentioned in order to guarantee the build reproducibility in the long term-->
     <build>
         <defaultGoal>install</defaultGoal>
-        <finalName>$(Filename)</finalName>
+        <finalName>petclinic</finalName>
         <resources>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
