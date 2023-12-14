@@ -116,7 +116,7 @@ stages:
   jobs:
   - deployment: DeployLinuxDevWebApp
     displayName: Deploy Linux Dev Web App
-    environment: $(devenvironmentName)
+    environment: 'DevWebApp'
     pool:
       vmImage: $(vmImageName)
     strategy:
@@ -139,7 +139,7 @@ stages:
   jobs: 
   - deployment: DeployLinuxStageWebApp
     displayName: Deploy Linux Stage Web App
-    environment: $(stageenvironmentName)
+    environment: 'StageWebApp'
     pool:
       vmImage: $(vmImageName)
     strategy:
