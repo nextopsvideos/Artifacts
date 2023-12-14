@@ -44,6 +44,7 @@ stages:
         workingDirectory: '$(build.sourcesdirectory)/env'
         commandOptions: '--auto-approve'
         environmentServiceNameAzureRM: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'    
+        
     - task: replacetokens@5
       inputs:
         rootDirectory: '/'
