@@ -7,17 +7,7 @@ trigger:
 - None
 
 variables:
-  # Web app name
-  devwebAppName: 'nextopsapp-dev-01'
-  stagewebAppName: 'nextopsapp-staging-01'
-
-  # Environment name
-  devenvironmentName: 'DevWebApp'
-  stageenvironmentName: 'StageWebApp'
-
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-  - group: 'DBPasses' 
+- group: 'DBPasses'
 
 stages:
 - stage: Build
