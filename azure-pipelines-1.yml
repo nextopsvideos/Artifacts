@@ -52,7 +52,7 @@ stages:
         ServerName: 'nextopsmysql-dev01.mysql.database.azure.com'
         DatabaseName: 'petclinic'
         SqlUsername: 'petclinic@nextopsmysql-dev01'
-        SqlPassword: 'Admin@12345678'
+        SqlPassword: $(DBDevPass)
     - task: MysqlDeploymentOnMachineGroup@1
       inputs:
         TaskNameSelector: 'SqlTaskFile'
@@ -60,12 +60,12 @@ stages:
         ServerName: 'nextopsmysql-dev01.mysql.database.azure.com'
         DatabaseName: 'petclinic'
         SqlUsername: 'petclinic@nextopsmysql-dev01'
-        SqlPassword: 'Admin@12345678'
+        SqlPassword: $(DBDevPass)
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
         mavenPomFile: 'pom.xml'
-        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql-dev01.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql-dev01 -Djdbc.password=Admin@12345678'
+        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql-dev01.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql-dev01 -Djdbc.password=$(DBDevPass)'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
@@ -87,7 +87,7 @@ stages:
         ServerName: 'nextopsmysql-staging01.mysql.database.azure.com'
         DatabaseName: 'petclinic'
         SqlUsername: 'petclinic@nextopsmysql-staging01'
-        SqlPassword: 'Admin@12345678'
+        SqlPassword: $(DBStagePass)
     - task: MysqlDeploymentOnMachineGroup@1
       inputs:
         TaskNameSelector: 'SqlTaskFile'
@@ -95,12 +95,12 @@ stages:
         ServerName: 'nextopsmysql-staging01.mysql.database.azure.com'
         DatabaseName: 'petclinic'
         SqlUsername: 'petclinic@nextopsmysql-staging01'
-        SqlPassword: 'Admin@12345678'    
+        SqlPassword: $(DBStagePass)    
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
         mavenPomFile: 'pom.xml'
-        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql-staging01.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql-staging01 -Djdbc.password=Admin@12345678'
+        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql-staging01.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql-staging01 -Djdbc.password=$(DBStagePass)'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
@@ -118,8 +118,8 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
 
-- stage: Deploy
-  displayName: Deploy stage
+- stage: Deploy to Dev
+  displayName: Deploy Dev
   dependsOn: Build
   condition: succeeded()
   jobs:
@@ -140,7 +140,12 @@ stages:
               appName: '$(devwebAppName)'
               package: '$(Pipeline.Workspace)/drop/dev/target/*.?(war|jar)'
               runtimeStack: 'TOMCAT|8.5-jre8'
-  
+
+- stage: Deploy to Stage
+  displayName: Deploy stage
+  dependsOn: 'Deploy to Dev'
+  condition: succeeded()
+  jobs: 
   - deployment: DeployLinuxStageWebApp
     displayName: Deploy Linux Stage Web App
     environment: $(stageenvironmentName)
