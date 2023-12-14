@@ -149,7 +149,6 @@ stages:
   - deployment: DeployLinuxStageWebApp
     displayName: Deploy Linux Stage Web App
     environment: $(stageenvironmentName)
-    dependsOn: DeployLinuxDevWebApp
     pool:
       vmImage: $(vmImageName)
     strategy:
