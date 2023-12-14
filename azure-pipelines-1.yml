@@ -44,21 +44,6 @@ stages:
         workingDirectory: '$(build.sourcesdirectory)/env'
         commandOptions: '--auto-approve'
         environmentServiceNameAzureRM: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'    
-        
-    - task: replacetokens@5
-      inputs:
-        rootDirectory: '$(build.sourcesdirectory)/'
-        targetFiles: 'pom.xml'
-        encoding: 'auto'
-        tokenPattern: 'azpipelines'
-        writeBOM: true
-        actionOnMissing: 'warn'
-        keepToken: false
-        actionOnNoFiles: 'continue'
-        enableTransforms: false
-        enableRecursion: false
-        useLegacyPattern: false
-        enableTelemetry: true
     - task: MysqlDeploymentOnMachineGroup@1
       inputs:
         TaskNameSelector: 'SqlTaskFile'
@@ -78,7 +63,15 @@ stages:
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
-        mavenPomFile: 'pom.xml'        
+        mavenPomFile: 'pom.xml'
+        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql11.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql11 -Djdbc.password=Admin@12345678'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
     - task: CopyFiles@2
       displayName: 'Copy Files to artifact staging directory'
       inputs:
