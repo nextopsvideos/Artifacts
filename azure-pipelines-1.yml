@@ -17,6 +17,7 @@ variables:
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
+  - group: 'DBPasses' 
 
 stages:
 - stage: Build
