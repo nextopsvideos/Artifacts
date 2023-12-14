@@ -9,6 +9,12 @@ trigger:
 variables:
 - group: 'DBPasses'
 
+parameters:
+   - name: environmentName
+     displayName: 'environmentName'
+     type: object
+     values: []
+
 stages:
 - stage: Build
   displayName: Build stage
