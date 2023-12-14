@@ -42,7 +42,21 @@ stages:
         command: 'apply'
         workingDirectory: '$(build.sourcesdirectory)/env'
         commandOptions: '--auto-approve'
-        environmentServiceNameAzureRM: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
+        environmentServiceNameAzureRM: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'    
+    - task: replacetokens@5
+      inputs:
+        rootDirectory: '/'
+        targetFiles: 'pom.xml'
+        encoding: 'auto'
+        tokenPattern: 'rm'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        actionOnNoFiles: 'continue'
+        enableTransforms: false
+        enableRecursion: false
+        useLegacyPattern: false
+        enableTelemetry: true
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
