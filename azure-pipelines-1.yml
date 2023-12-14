@@ -62,7 +62,7 @@ stages:
     - task: MysqlDeploymentOnMachineGroup@1
       inputs:
         TaskNameSelector: 'SqlTaskFile'
-        SqlFile: '$(build.sourcesdirectory)/drop/schema.sql'
+        SqlFile: '$(build.sourcesdirectory)/src/main/resources/db/mysql/schema.sql'
         ServerName: 'nextopsmysql11.mysql.database.azure.com'
         DatabaseName: 'petclinic'
         SqlUsername: 'petclinic@nextopsmysql11'
@@ -70,7 +70,7 @@ stages:
     - task: MysqlDeploymentOnMachineGroup@1
       inputs:
         TaskNameSelector: 'SqlTaskFile'
-        SqlFile: '$(build.sourcesdirectory)/drop/data.sql'
+        SqlFile: '$(build.sourcesdirectory)/src/main/resources/db/mysql/data.sql'
         ServerName: 'nextopsmysql11.mysql.database.azure.com'
         DatabaseName: 'petclinic'
         SqlUsername: 'petclinic@nextopsmysql11'
