@@ -118,7 +118,7 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
 
-- stage: 'Deploy to Dev'
+- stage: Deploy
   displayName: Deploy Dev
   dependsOn: Build
   condition: succeeded()
@@ -141,7 +141,7 @@ stages:
               package: '$(Pipeline.Workspace)/drop/dev/target/*.?(war|jar)'
               runtimeStack: 'TOMCAT|8.5-jre8'
 
-- stage: 'Deploy to Stage'
+- stage: Deploy
   displayName: Deploy stage
   dependsOn: 'Deploy to Dev'
   condition: succeeded()
