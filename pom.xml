@@ -492,9 +492,9 @@
                 <db.script>mysql</db.script>
                 <jpa.database>MYSQL</jpa.database>
                 <jdbc.driverClassName>com.mysql.cj.jdbc.Driver</jdbc.driverClassName>
-                <jdbc.url>jdbc:mysql://$(DBName).mysql.database.azure.com:3306/petclinic?useUnicode=true</jdbc.url>
-                <jdbc.username>petclinic@$(DBName)</jdbc.username>
-                <jdbc.password>Admin@12345678</jdbc.password>
+                <jdbc.url>jdbc:mysql://localhost:3306/petclinic?useUnicode=true</jdbc.url>
+                <jdbc.username>petclinic</jdbc.username>
+                <jdbc.password>petclinic</jdbc.password>
             </properties>
             <dependencies>
                 <dependency>
