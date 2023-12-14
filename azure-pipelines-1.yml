@@ -47,10 +47,10 @@ stages:
         
     - task: replacetokens@5
       inputs:
-        rootDirectory: '/'
+        rootDirectory: '$(build.sourcesdirectory)/'
         targetFiles: 'pom.xml'
         encoding: 'auto'
-        tokenPattern: 'rm'
+        tokenPattern: 'azpipelines'
         writeBOM: true
         actionOnMissing: 'warn'
         keepToken: false
@@ -59,6 +59,22 @@ stages:
         enableRecursion: false
         useLegacyPattern: false
         enableTelemetry: true
+    - task: MysqlDeploymentOnMachineGroup@1
+      inputs:
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: '$(build.sourcesdirectory)/drop/schema.sql'
+        ServerName: 'nextopsmysql11.mysql.database.azure.com'
+        DatabaseName: 'petclinic'
+        SqlUsername: 'petclinic@nextopsmysql11'
+        SqlPassword: 'Admin@12345678'
+    - task: MysqlDeploymentOnMachineGroup@1
+      inputs:
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: '$(build.sourcesdirectory)/drop/data.sql'
+        ServerName: 'nextopsmysql11.mysql.database.azure.com'
+        DatabaseName: 'petclinic'
+        SqlUsername: 'petclinic@nextopsmysql11'
+        SqlPassword: 'Admin@12345678'
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
@@ -77,4 +93,3 @@ stages:
 
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
-
