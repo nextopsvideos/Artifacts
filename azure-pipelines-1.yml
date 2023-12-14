@@ -8,11 +8,12 @@ trigger:
 
 variables:
   # Web app name
-  webAppName: 'nextopswa11'
-  DBName : 'nextopsmysql11'
+  devwebAppName: 'nextopsapp-dev-01'
+  stagewebAppName: 'nextopsapp-staging-01'
 
   # Environment name
-  environmentName: 'nextopswa11'
+  devenvironmentName: 'DevWebApp'
+  stageenvironmentName: 'StageWebApp'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -48,23 +49,23 @@ stages:
       inputs:
         TaskNameSelector: 'SqlTaskFile'
         SqlFile: '$(build.sourcesdirectory)/src/main/resources/db/mysql/schema.sql'
-        ServerName: 'nextopsmysql11.mysql.database.azure.com'
+        ServerName: 'nextopsmysql-dev01.mysql.database.azure.com'
         DatabaseName: 'petclinic'
-        SqlUsername: 'petclinic@nextopsmysql11'
+        SqlUsername: 'petclinic@nextopsmysql-dev01'
         SqlPassword: 'Admin@12345678'
     - task: MysqlDeploymentOnMachineGroup@1
       inputs:
         TaskNameSelector: 'SqlTaskFile'
         SqlFile: '$(build.sourcesdirectory)/src/main/resources/db/mysql/data.sql'
-        ServerName: 'nextopsmysql11.mysql.database.azure.com'
+        ServerName: 'nextopsmysql-dev01.mysql.database.azure.com'
         DatabaseName: 'petclinic'
-        SqlUsername: 'petclinic@nextopsmysql11'
+        SqlUsername: 'petclinic@nextopsmysql-dev01'
         SqlPassword: 'Admin@12345678'
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
         mavenPomFile: 'pom.xml'
-        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql11.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql11 -Djdbc.password=Admin@12345678'
+        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql-dev01.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql-dev01 -Djdbc.password=Admin@12345678'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
@@ -78,6 +79,41 @@ stages:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/target/*.?(war|jar)'
         TargetFolder: $(Build.ArtifactStagingDirectory)/dev
+    
+    - task: MysqlDeploymentOnMachineGroup@1
+      inputs:
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: '$(build.sourcesdirectory)/src/main/resources/db/mysql/schema.sql'
+        ServerName: 'nextopsmysql-staging01.mysql.database.azure.com'
+        DatabaseName: 'petclinic'
+        SqlUsername: 'petclinic@nextopsmysql-staging01'
+        SqlPassword: 'Admin@12345678'
+    - task: MysqlDeploymentOnMachineGroup@1
+      inputs:
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: '$(build.sourcesdirectory)/src/main/resources/db/mysql/data.sql'
+        ServerName: 'nextopsmysql-staging01.mysql.database.azure.com'
+        DatabaseName: 'petclinic'
+        SqlUsername: 'petclinic@nextopsmysql-staging01'
+        SqlPassword: 'Admin@12345678'    
+    - task: Maven@3
+      displayName: 'Maven Package'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        options: '-Ddb.script=mysql -Djpa.database=MYSQL -Djdbc.driverClassName=com.mysql.cj.jdbc.Driver -Djdbc.url=jdbc:mysql://nextopsmysql-staging01.mysql.database.azure.com:3306/petclinic?useUnicode=true -Djdbc.username=petclinic@nextopsmysql-staging01 -Djdbc.password=Admin@12345678'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/*.?(war|jar)'
+        TargetFolder: $(Build.ArtifactStagingDirectory)/stage
 
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
@@ -87,9 +123,9 @@ stages:
   dependsOn: Build
   condition: succeeded()
   jobs:
-  - deployment: DeployLinuxWebApp
-    displayName: Deploy Linux Web App
-    environment: $(environmentName)
+  - deployment: DeployLinuxDevWebApp
+    displayName: Deploy Linux Dev Web App
+    environment: $(devenvironmentName)
     pool:
       vmImage: $(vmImageName)
     strategy:
@@ -97,10 +133,29 @@ stages:
         deploy:
           steps:
           - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy: nextopswa11'
+            displayName: 'Azure Web App Deploy: nextopsapp-dev-01'
             inputs:
               azureSubscription: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
               appType: 'webAppLinux'
-              appName: '$(webAppName)'
+              appName: '$(devwebAppName)'
               package: '$(Pipeline.Workspace)/drop/dev/target/*.?(war|jar)'
+              runtimeStack: 'TOMCAT|8.5-jre8'
+  
+  - deployment: DeployLinuxStageWebApp
+    displayName: Deploy Linux Stage Web App
+    environment: $(stageenvironmentName)
+    dependsOn: DeployLinuxDevWebApp
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy: nextopsapp-staging-01'
+            inputs:
+              azureSubscription: 'Pay-As-You-Go (a355c32e-4a22-4b05-aab4-be236850fa6e)'
+              appType: 'webAppLinux'
+              appName: '$(stagewebAppName)'
+              package: '$(Pipeline.Workspace)/drop/stage/target/*.?(war|jar)'
               runtimeStack: 'TOMCAT|8.5-jre8'
