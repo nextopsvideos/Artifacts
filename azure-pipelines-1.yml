@@ -143,7 +143,7 @@ stages:
 
 - stage: Deploy1
   displayName: Deploy stage
-  dependsOn: 'Deploy to Dev'
+  dependsOn: Deploy
   condition: succeeded()
   jobs: 
   - deployment: DeployLinuxStageWebApp
