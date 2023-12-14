@@ -80,16 +80,11 @@ stages:
       inputs:
         mavenPomFile: 'pom.xml'        
     - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(build.sourcesdirectory)/src/main/resources/db/mysql'
-        Contents: '*.sql'
-        TargetFolder: '$(build.artifactstagingdirectory)'
-    - task: CopyFiles@2
       displayName: 'Copy Files to artifact staging directory'
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/target/*.?(war|jar)'
-        TargetFolder: $(Build.ArtifactStagingDirectory)
+        TargetFolder: $(Build.ArtifactStagingDirectory)/dev
 
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
