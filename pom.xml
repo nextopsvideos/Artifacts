@@ -514,6 +514,29 @@
             <name>Spring Milestone Repository</name>
             <url>https://repo.spring.io/milestone</url>
         </repository>
+        <repository>
+            <id>Artifacts01_Feed</id>
+            <url>https://pkgs.dev.azure.com/nextopsvids2023/Artifacts01/_packaging/Artifacts01_Feed/maven/v1</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>Artifacts01_Feed</id>
+            <url>https://pkgs.dev.azure.com/nextopsvids2023/Artifacts01/_packaging/Artifacts01_Feed/maven/v1</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </distributionManagement>
 
 </project>
