@@ -72,3 +72,11 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
 
+    - task: DownloadPackage@1
+      inputs:
+        packageType: 'maven'
+        feed: '396fa978-a0c4-47cc-bad2-6da94523f588/118b96a5-45d2-4a1e-996f-aa06484c8181'
+        view: 'a493b978-d22d-45be-848c-22f2a3579307'
+        definition: '2e26df78-1d65-4e67-a79f-b14466854819'
+        version: '5.3.22'
+        downloadPath: '$(System.ArtifactsDirectory)'
