@@ -465,7 +465,10 @@
 
     <profiles>
         <profile>
-            <id>H2</id>            
+            <id>H2</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>            
             <properties>
                 <db.script>h2</db.script>
                 <jpa.database>H2</jpa.database>
@@ -484,10 +487,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>MySQL</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <id>MySQL</id>            
             <properties>
                 <db.script>mysql</db.script>
                 <jpa.database>MYSQL</jpa.database>
