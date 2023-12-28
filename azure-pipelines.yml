@@ -4,7 +4,23 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- None
+  branches:
+   exclude:
+     - main
+  paths:
+   include:
+     - '**/src' 
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - '**/src'
+
+schedules:
+  - cron: "30 17 * * *"
 
 variables:
   # Web app name
