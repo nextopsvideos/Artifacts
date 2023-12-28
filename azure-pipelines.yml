@@ -26,6 +26,9 @@ stages:
       vmImage: $(vmImageName)
 
     steps:
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'Artifacts01_Feed'
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
